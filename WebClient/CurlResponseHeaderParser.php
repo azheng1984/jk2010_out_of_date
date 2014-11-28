@@ -18,7 +18,7 @@ class CurlResponseHeaderParser {
             if ($rawHeaders === null) {
                 throw new Exception(
                     'fail to parse response headers.'
-                        . ' headerwritefunction has been overwritten'
+                        . ' headerfunction has been overwritten'
                         . ' in other callback function.'
                 );
             }
