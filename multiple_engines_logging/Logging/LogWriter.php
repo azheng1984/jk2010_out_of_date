@@ -2,7 +2,6 @@
 namespace Hyperframework\Logging;
 
 use RuntimeException;
-use Hyperframework\Common\Config;
 use Hyperframework\Common\FileLock;
 
 class LogWriter {
@@ -13,8 +12,12 @@ class LogWriter {
      * @return void
      */
     public function write($text) {
+        $path = $this->getPath();
+        if ($path === null) {
+            throw new LoggingException('The log path cannot be null.');
+        }
         FileLock::run(
-            $this->getPath(),
+            $path,
             'a',
             LOCK_EX,
             function($handle) use ($text) {

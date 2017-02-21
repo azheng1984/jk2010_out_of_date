@@ -6,7 +6,7 @@ use Hyperframework\Common\Config;
 use Hyperframework\Common\ConfigException;
 
 class LoggerEngine {
-    private $options;
+    private $loggerName;
     private $level;
     private $writer;
     private $formatter;
@@ -23,7 +23,7 @@ class LoggerEngine {
      * @param mixed $mixed
      * @return void
      */
-    public function log($mixed) {
+    public function log($level, $mixed) {
         if ($level > $this->getLevel()) {
             return;
         }
@@ -57,10 +57,6 @@ class LoggerEngine {
         if ($this->level === null) {
             $configName = $this->getLoggerName() . '.log_level';
             $name = Config::getString($configName, '');
-            if ($name === '') {
-                $configName = 'hyperframework.logging.log_level';
-                $name = Config::getString($configName, '');
-            }
             if ($name !== '') {
                 $level = LogLevel::getCode($name);
                 if ($level === null) {
@@ -110,7 +106,7 @@ class LoggerEngine {
         if ($this->writer === null) {
             $class = Config::getClass(
                 $this->getLoggerName() . '.log_writer_class',
-                $this->getDefaultWriterClass();
+                $this->getDefaultWriterClass()
             );
             $this->writer = new $class;
             $this->writer->setPath(Config::getString(
@@ -146,9 +142,6 @@ class LoggerEngine {
      * @return string
      */
     protected function getDefaultPath() {
-        return 'log' . DIRECTORY_SEPARATOR . 'app.log'
-    }
-
-    private function getConfig($name) {
+        return 'log' . DIRECTORY_SEPARATOR . 'app.log';
     }
 }
